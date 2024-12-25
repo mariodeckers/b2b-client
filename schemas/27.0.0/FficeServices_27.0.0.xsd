@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- B2B revision = 27.2.0.1.188 -->
+<xs:schema version="1.0"
+           targetNamespace="eurocontrol/cfmu/b2b/FficeServices"
+           xmlns:ffice="eurocontrol/cfmu/b2b/FficeServices"
+           xmlns:common="eurocontrol/cfmu/b2b/CommonServices"
+           xmlns:fb="http://www.fixm.aero/base/4.3"
+           xmlns:fixm="http://www.fixm.aero/flight/4.3"
+           xmlns:fxmsg="http://www.fixm.aero/app/ffice/1.1"
+           xmlns:bugfix="http://www.fixm.aero/ffice/1.1/bugfix/2024.04.30"
+           xmlns:nm="http://www.eurocontrol.int/nm/fixm/ext/1.5"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="eurocontrol/cfmu/b2b/CommonServices" schemaLocation="CommonServices_27.0.0.xsd"/>
+  <xs:import namespace="http://www.fixm.aero/base/4.3" schemaLocation="fixm_v4.3_ffice_v1.1/schemas/applications/fficemessage/fficetemplates/FficeBase.xsd"/>
+  <xs:import namespace="http://www.fixm.aero/flight/4.3" schemaLocation="fixm_v4.3_ffice_v1.1/schemas/applications/fficemessage/fficetemplates/FficeFlight.xsd"/>
+  <xs:import namespace="http://www.fixm.aero/app/ffice/1.1" schemaLocation="fixm_v4.3_ffice_v1.1/schemas/applications/fficemessage/fficetemplates/FficeTemplates.xsd"/>
+  <xs:import namespace="http://www.fixm.aero/ffice/1.1/bugfix/2024.04.30" schemaLocation="fixm_v4.3_ffice_v1.1/schemas/bugfix/v20240430/FficeMessageBugFix.xsd"/>
+  <xs:import namespace="http://www.eurocontrol.int/nm/fixm/ext/1.5" schemaLocation="fixm_v4.3_ffice_v1.1/schemas/extensions/ectl/nm/NmExtension_1.5.xsd"/>
+  <xs:element name="FficeFlightFilingSubscriptionCreationRequest" type="ffice:FficeFlightFilingSubscriptionCreationRequest"/>
+  <xs:element name="FficeFlightFilingSubscriptionRetrievalRequest" type="ffice:FficeFlightFilingSubscriptionRetrievalRequest"/>
+  <xs:element name="FficeFlightFilingSubscriptionUpdateRequest" type="ffice:FficeFlightFilingSubscriptionUpdateRequest"/>
+  <xs:element name="FficePublicationSubscriptionCreationRequest" type="ffice:FficePublicationSubscriptionCreationRequest"/>
+  <xs:element name="FficePublicationSubscriptionRetrievalRequest" type="ffice:FficePublicationSubscriptionRetrievalRequest"/>
+  <xs:element name="FficePublicationSubscriptionUpdateRequest" type="ffice:FficePublicationSubscriptionUpdateRequest"/>
+  <xs:element name="FiledFlightPlanRequest" type="ffice:FiledFlightPlanRequest"/>
+  <xs:element name="FlightArrivalRequest" type="ffice:FlightArrivalRequest"/>
+  <xs:element name="FlightDataRequest" type="ffice:FlightDataRequest"/>
+  <xs:element name="FlightDepartureRequest" type="ffice:FlightDepartureRequest"/>
+  <xs:element name="FlightPlanCancellationRequest" type="ffice:FlightPlanCancellationRequest"/>
+  <xs:element name="FlightPlanUpdateRequest" type="ffice:FlightPlanUpdateRequest"/>
+  <xs:element name="SubmissionStatusRetrievalRequest" type="ffice:SubmissionStatusRetrievalRequest"/>
+  <xs:element name="TrialRequest" type="ffice:TrialRequest"/>
+  <xs:element name="FficeFlightFilingSubscriptionCreationReply" type="ffice:FficeFlightFilingSubscriptionCreationReply"/>
+  <xs:element name="FficeFlightFilingSubscriptionRetrievalReply" type="ffice:FficeFlightFilingSubscriptionRetrievalReply"/>
+  <xs:element name="FficeFlightFilingSubscriptionUpdateReply" type="ffice:FficeFlightFilingSubscriptionUpdateReply"/>
+  <xs:element name="FficePublicationSubscriptionCreationReply" type="ffice:FficePublicationSubscriptionCreationReply"/>
+  <xs:element name="FficePublicationSubscriptionRetrievalReply" type="ffice:FficePublicationSubscriptionRetrievalReply"/>
+  <xs:element name="FficePublicationSubscriptionUpdateReply" type="ffice:FficePublicationSubscriptionUpdateReply"/>
+  <xs:element name="FiledFlightPlanReply" type="ffice:FiledFlightPlanReply"/>
+  <xs:element name="FlightArrivalReply" type="ffice:FlightArrivalReply"/>
+  <xs:element name="FlightDataReply" type="ffice:FlightDataReply"/>
+  <xs:element name="FlightDepartureReply" type="ffice:FlightDepartureReply"/>
+  <xs:element name="FlightPlanCancellationReply" type="ffice:FlightPlanCancellationReply"/>
+  <xs:element name="FlightPlanUpdateReply" type="ffice:FlightPlanUpdateReply"/>
+  <xs:element name="SubmissionStatusRetrievalReply" type="ffice:SubmissionStatusRetrievalReply"/>
+  <xs:element name="TrialReply" type="ffice:TrialReply"/>
+  <xs:element name="FficeFlightFilingMessage" type="ffice:FficeFlightFilingMessage"/>
+  <xs:element name="FficePublicationMessage" type="ffice:FficePublicationMessage"/>
+  <xs:simpleType name="AerodromeICAOIdWildcard">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="([A-Z]{3,4}|([A-Z]{1,3}(\*)))"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="FilingId">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="([A-Z]{2}[0-9]{8}){1,2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="FlightPlanEventType">
+    <xs:union>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="AFP"/>
+          <xs:enumeration value="ARR"/>
+          <xs:enumeration value="CHG"/>
+          <xs:enumeration value="CNL"/>
+          <xs:enumeration value="DEP"/>
+          <xs:enumeration value="DLA"/>
+          <xs:enumeration value="FNM"/>
+          <xs:enumeration value="FPL"/>
+          <xs:enumeration value="MFS"/>
+          <xs:enumeration value="REVAL"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:pattern value="OTHER:[a-zA-Z_][a-zA-Z0-9_]*"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:simpleType name="RevalidationStatus">
+    <xs:union>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="COMPLIANT"/>
+          <xs:enumeration value="ADVISORY"/>
+          <xs:enumeration value="SUSPENDED"/>
+        </xs:restriction>
+      </xs:simpleType>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:pattern value="OTHER:[a-zA-Z_][a-zA-Z0-9_]*"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:complexType name="AircraftOperatorFilter" abstract="false">
+    <xs:sequence>
+      <xs:element name="arcidAircraftOperatorDesignators_v4_3" minOccurs="0" maxOccurs="1"><xs:complexType><xs:sequence><xs:element name="item" type="fb:AircraftOperatorDesignatorType" minOccurs="0" maxOccurs="20"/></xs:sequence></xs:complexType></xs:element>
+      <xs:element name="oprAircraftOperatorDesignators_v4_3" minOccurs="0" maxOccurs="1"><xs:complexType><xs:sequence><xs:element name="item" type="fb:AircraftOperatorDesignatorType" minOccurs="0" maxOccurs="20"/></xs:sequence></xs:complexType></xs:element>
+      <xs:element name="operatingAircraftOperatorDesignators_v4_3" minOccurs="0" maxOccurs="1"><xs:complexType><xs:sequence><xs:element name="item" type="fb:AircraftOperatorDesignatorType" minOccurs="0" maxOccurs="20"/></xs:sequence></xs:complexType></xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FficeFlightFilingMessage" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:BusinessPSMessage">
+    <xs:sequence>
+      <xs:element name="filingStatus_v1_1" type="fxmsg:FficeFS_FficeMessageType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="submissionResponse_v1_1" type="fxmsg:FficeSR_FficeMessageType" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FficeFlightFilingMessageFilter" abstract="false">
+    <xs:sequence>
+      <xs:element name="aircraftOperators" type="ffice:AircraftOperatorFilter" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FficeFlightFilingSubscription" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Subscription">
+    <xs:sequence>
+      <xs:element name="messageFilter" type="ffice:FficeFlightFilingMessageFilter" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FficeFlightFilingSubscriptionCreationReply" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Reply">
+    <xs:sequence>
+      <xs:element name="data" type="ffice:FficeFlightFilingSubscriptionCreationReplyData" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FficeFlightFilingSubscriptionCreationReplyData" abstract="false">
+    <xs:sequence>
+      <xs:element name="subscription" type="ffice:FficeFlightFilingSubscription" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FficeFlightFilingSubscriptionCreationRequest" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:SubscriptionCreationRequest">
+    <xs:sequence>
+      <xs:element name="messageFilter" type="ffice:FficeFlightFilingMessageFilter" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FficeFlightFilingSubscriptionRetrievalReply" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Reply">
+    <xs:sequence>
+      <xs:element name="data" type="ffice:FficeFlightFilingSubscriptionRetrievalReplyData" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FficeFlightFilingSubscriptionRetrievalReplyData" abstract="false">
+    <xs:sequence>
+      <xs:element name="subscription" type="ffice:FficeFlightFilingSubscription" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FficeFlightFilingSubscriptionRetrievalRequest" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:SubscriptionRetrievalRequest">
+    <xs:sequence>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FficeFlightFilingSubscriptionUpdateReply" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Reply">
+    <xs:sequence>
+      <xs:element name="data" type="ffice:FficeFlightFilingSubscriptionUpdateReplyData" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FficeFlightFilingSubscriptionUpdateReplyData" abstract="false">
+    <xs:sequence>
+      <xs:element name="subscription" type="ffice:FficeFlightFilingSubscription" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FficeFlightFilingSubscriptionUpdateRequest" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:SubscriptionUpdateRequest">
+    <xs:sequence>
+      <xs:element name="messageFilter" type="ffice:FficeFlightFilingMessageFilter" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FficePublicationMessage" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:BusinessPSMessage">
+    <xs:sequence>
+      <xs:element name="flight_v4_3" type="fixm:FlightType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="operatorFlightPlanVersion_v4_3" type="fb:CountPositiveType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="eventHistory" minOccurs="0" maxOccurs="1"><xs:complexType><xs:sequence><xs:element name="item" type="ffice:FlightPlanEventHistoryItem" minOccurs="1" maxOccurs="1000"/></xs:sequence></xs:complexType></xs:element>
+      <xs:element name="concernedUnits" minOccurs="0" maxOccurs="1"><xs:complexType><xs:sequence><xs:element name="item" type="common:AirNavigationUnitId" minOccurs="0" maxOccurs="unbounded"/></xs:sequence></xs:complexType></xs:element>
+      <xs:element name="revalidationInformation" type="ffice:RevalidationInformation" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FficePublicationMessageFilter" abstract="false">
+    <xs:sequence>
+      <xs:element name="events" minOccurs="0" maxOccurs="1"><xs:complexType><xs:sequence><xs:element name="item" type="ffice:FlightPlanEventType" minOccurs="0" maxOccurs="20"/></xs:sequence></xs:complexType></xs:element>
+      <xs:element name="flightSet" minOccurs="0" maxOccurs="1"><xs:complexType><xs:sequence><xs:element name="item" type="ffice:FlightSetDefinitionElement" minOccurs="1" maxOccurs="unbounded"/></xs:sequence></xs:complexType></xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FficePublicationPayloadConfiguration" abstract="false">
+    <xs:sequence>
+      <xs:element name="concernedUnits" minOccurs="1" maxOccurs="1"><xs:simpleType><xs:restriction base="xs:boolean"></xs:restriction></xs:simpleType></xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FficePublicationSubscription" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Subscription">
+    <xs:sequence>
+      <xs:element name="messageFilter" type="ffice:FficePublicationMessageFilter" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="payloadConfiguration" type="ffice:FficePublicationPayloadConfiguration" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FficePublicationSubscriptionCreationReply" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Reply">
+    <xs:sequence>
+      <xs:element name="data" type="ffice:FficePublicationSubscriptionCreationReplyData" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FficePublicationSubscriptionCreationReplyData" abstract="false">
+    <xs:sequence>
+      <xs:element name="subscription" type="ffice:FficePublicationSubscription" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FficePublicationSubscriptionCreationRequest" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:SubscriptionCreationRequest">
+    <xs:sequence>
+      <xs:element name="messageFilter" type="ffice:FficePublicationMessageFilter" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="payloadConfiguration" type="ffice:FficePublicationPayloadConfiguration" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FficePublicationSubscriptionRetrievalReply" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Reply">
+    <xs:sequence>
+      <xs:element name="data" type="ffice:FficePublicationSubscriptionRetrievalReplyData" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FficePublicationSubscriptionRetrievalReplyData" abstract="false">
+    <xs:sequence>
+      <xs:element name="subscription" type="ffice:FficePublicationSubscription" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="synchronisationSummary" type="common:SubscriptionSynchronisationSummary" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FficePublicationSubscriptionRetrievalRequest" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:SubscriptionRetrievalRequest">
+    <xs:sequence>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FficePublicationSubscriptionUpdateReply" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Reply">
+    <xs:sequence>
+      <xs:element name="data" type="ffice:FficePublicationSubscriptionUpdateReplyData" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FficePublicationSubscriptionUpdateReplyData" abstract="false">
+    <xs:sequence>
+      <xs:element name="subscription" type="ffice:FficePublicationSubscription" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FficePublicationSubscriptionUpdateRequest" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:SubscriptionUpdateRequest">
+    <xs:sequence>
+      <xs:element name="messageFilter" type="ffice:FficePublicationMessageFilter" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="payloadConfiguration" type="ffice:FficePublicationPayloadConfiguration" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FiledFlightPlanReply" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Reply">
+    <xs:sequence>
+      <xs:element name="data" type="ffice:FiledFlightPlanReplyData" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FiledFlightPlanReplyData" abstract="false">
+    <xs:sequence>
+      <xs:element name="filingStatus_v1_1" type="fxmsg:FficeFS_FficeMessageType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="submissionResponse_v1_1" type="fxmsg:FficeSR_FficeMessageType" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FiledFlightPlanRequest" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Request">
+    <xs:sequence>
+      <xs:element name="filedFlightPlan_v1_1" type="fxmsg:FficeFFP_FficeMessageType" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FlightArrivalReply" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Reply">
+    <xs:sequence>
+      <xs:element name="data" type="ffice:FlightArrivalReplyData" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FlightArrivalReplyData" abstract="false">
+    <xs:sequence>
+      <xs:element name="submissionResponse_v1_1" type="fxmsg:FficeSR_FficeMessageType" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FlightArrivalRequest" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Request">
+    <xs:sequence>
+      <xs:element name="flightArrival_v1_1" type="fxmsg:FficeFA_FficeMessageType" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FlightDataReply" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Reply">
+    <xs:sequence>
+      <xs:element name="data" type="ffice:FlightDataReplyData" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FlightDataReplyData" abstract="false">
+    <xs:sequence>
+      <xs:element name="filingStatus_v1_1" type="fxmsg:FficeFS_FficeMessageType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="submissionResponse_v1_1" type="fxmsg:FficeSR_FficeMessageType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="flightDataResponse_v1_1" type="fxmsg:FficeFDRP_FficeMessageType" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FlightDataRequest" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Request">
+    <xs:sequence>
+      <xs:element name="flightDataRequest_v1_1" type="fxmsg:FficeFDRQ_FficeMessageType" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FlightDepartureReply" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Reply">
+    <xs:sequence>
+      <xs:element name="data" type="ffice:FlightDepartureReplyData" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FlightDepartureReplyData" abstract="false">
+    <xs:sequence>
+      <xs:element name="submissionResponse_v1_1" type="fxmsg:FficeSR_FficeMessageType" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FlightDepartureRequest" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Request">
+    <xs:sequence>
+      <xs:element name="flightDeparture_v1_1" type="fxmsg:FficeFD_FficeMessageType" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FlightPlanCancellationReply" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Reply">
+    <xs:sequence>
+      <xs:element name="data" type="ffice:FlightPlanCancellationReplyData" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FlightPlanCancellationReplyData" abstract="false">
+    <xs:sequence>
+      <xs:element name="submissionResponse_v1_1" type="fxmsg:FficeSR_FficeMessageType" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FlightPlanCancellationRequest" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Request">
+    <xs:sequence>
+      <xs:element name="flightPlanCancellation_v1_1" type="fxmsg:FficeFC_FficeMessageType" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FlightPlanEvent" abstract="false">
+    <xs:sequence>
+      <xs:element name="eventType" type="ffice:FlightPlanEventType" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="timestamp" type="common:DateTimeSecond" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="originator" type="common:AirNavigationUnitId" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FlightPlanEventHistoryItem" abstract="false">
+    <xs:sequence>
+      <xs:element name="sequenceNumber" minOccurs="1" maxOccurs="1"><xs:simpleType><xs:restriction base="xs:int"></xs:restriction></xs:simpleType></xs:element>
+      <xs:element name="event" type="ffice:FlightPlanEvent" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FlightPlanUpdateReply" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Reply">
+    <xs:sequence>
+      <xs:element name="data" type="ffice:FlightPlanUpdateReplyData" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FlightPlanUpdateReplyData" abstract="false">
+    <xs:sequence>
+      <xs:element name="filingStatus_v1_1" type="fxmsg:FficeFS_FficeMessageType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="submissionResponse_v1_1" type="fxmsg:FficeSR_FficeMessageType" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FlightPlanUpdateRequest" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Request">
+    <xs:sequence>
+      <xs:element name="flightPlanUpdate_v1_1" type="fxmsg:FficeFPU_FficeMessageType" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FlightSetDefinitionElement" abstract="false">
+    <xs:sequence>
+      <xs:element name="aircraftOperatorDesignators_v4_3" minOccurs="0" maxOccurs="1"><xs:complexType><xs:sequence><xs:element name="item" type="fb:AircraftOperatorDesignatorType" minOccurs="0" maxOccurs="unbounded"/></xs:sequence></xs:complexType></xs:element>
+      <xs:element name="aircraftRegistrations_v4_3" minOccurs="0" maxOccurs="1"><xs:complexType><xs:sequence><xs:element name="item" type="fixm:AircraftRegistrationType" minOccurs="0" maxOccurs="unbounded"/></xs:sequence></xs:complexType></xs:element>
+      <xs:element name="aerodromesOfDeparture" minOccurs="0" maxOccurs="1"><xs:complexType><xs:sequence><xs:element name="item" type="ffice:AerodromeICAOIdWildcard" minOccurs="0" maxOccurs="unbounded"/></xs:sequence></xs:complexType></xs:element>
+      <xs:element name="aerodromesOfArrival" minOccurs="0" maxOccurs="1"><xs:complexType><xs:sequence><xs:element name="item" type="ffice:AerodromeICAOIdWildcard" minOccurs="0" maxOccurs="unbounded"/></xs:sequence></xs:complexType></xs:element>
+      <xs:element name="alternateAerodromes" minOccurs="0" maxOccurs="1"><xs:complexType><xs:sequence><xs:element name="item" type="ffice:AerodromeICAOIdWildcard" minOccurs="0" maxOccurs="unbounded"/></xs:sequence></xs:complexType></xs:element>
+      <xs:element name="anuIds" minOccurs="0" maxOccurs="1"><xs:complexType><xs:sequence><xs:element name="item" type="common:AirNavigationUnitId" minOccurs="0" maxOccurs="unbounded"/></xs:sequence></xs:complexType></xs:element>
+      <xs:element name="flightPlanOriginators" minOccurs="0" maxOccurs="1"><xs:complexType><xs:sequence><xs:element name="item" type="common:AirNavigationUnitId" minOccurs="0" maxOccurs="unbounded"/></xs:sequence></xs:complexType></xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="RevalidationInformation" abstract="false">
+    <xs:sequence>
+      <xs:element name="gufi" type="common:UUID" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="revalidationStatus" type="ffice:RevalidationStatus" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="revalidationErrors" minOccurs="0" maxOccurs="unbounded"><xs:simpleType><xs:restriction base="xs:string"></xs:restriction></xs:simpleType></xs:element>
+      <xs:element name="proposedRoute" minOccurs="0" maxOccurs="1"><xs:simpleType><xs:restriction base="xs:string"></xs:restriction></xs:simpleType></xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SubmissionStatusRetrievalReply" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Reply">
+    <xs:sequence>
+      <xs:element name="data" type="ffice:SubmissionStatusRetrievalReplyData" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SubmissionStatusRetrievalReplyData" abstract="false">
+    <xs:sequence>
+      <xs:element name="filingStatus_v1_1" type="fxmsg:FficeFS_FficeMessageType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="submissionResponse_v1_1" type="fxmsg:FficeSR_FficeMessageType" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SubmissionStatusRetrievalRequest" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Request">
+    <xs:sequence>
+      <xs:element name="submissionStatus" type="ffice:FilingId" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TrialReply" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Reply">
+    <xs:sequence>
+      <xs:element name="data" type="ffice:TrialReplyData" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TrialReplyData" abstract="false">
+    <xs:sequence>
+      <xs:element name="trialResponse_v1_1" type="fxmsg:FficeTRP_FficeMessageType" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="submissionResponse_v1_1" type="fxmsg:FficeSR_FficeMessageType" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="TrialRequest" abstract="false">
+    <xs:complexContent>
+      <xs:extension base="common:Request">
+    <xs:sequence>
+      <xs:element name="trialRequest_v1_1" type="fxmsg:FficeTRQ_FficeMessageType" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>

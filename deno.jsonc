@@ -1,0 +1,24 @@
+{
+  "name": "@mariodeckers/b2b-client",
+  "version": "0.1.0", // should match git tag "vX.Y.Z"
+  "exports": "./mod.ts", // https://jsr.io/docs/package-configuration
+  "imports": {
+    "@libs/xml": "jsr:@libs/xml@^6.0.4"
+  },
+  "fmt": {
+    "exclude": ["cert/", "schemas/"]
+  },
+  "publish": {
+    "include": [
+      "src/",
+      "deno.jsonc",
+      "mod.ts",
+      "README.md",
+      "LICENSE"
+    ],
+    "exclude": [
+      "src/tests/",
+      "cert/"
+    ]
+  }
+}
