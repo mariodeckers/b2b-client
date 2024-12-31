@@ -1,4 +1,83 @@
 /**
+ * Represents a request to delete a subscription.
+ */
+export interface SubscriptionDeletionRequest extends Request {
+  uuid: UUID;
+}
+
+/**
+ * The request structure for a SubscriptionList operation
+ */
+export interface SubscriptionListRequest extends Request {
+  /**
+   * @minOccurs 0
+   * @maxOccurs 1
+   */
+  states?: {
+    item?: SubscriptionState[];
+  };
+}
+/**
+ * Represents a request to pause a subscription.
+ */
+export interface SubscriptionPauseRequest extends Request {
+  uuid: UUID;
+  heartbeatEnabled?: boolean; // xs:boolean
+}
+
+/**
+ * Represents a request to resume a subscription.
+ */
+export interface SubscriptionResumeRequest extends Request {
+  uuid: UUID;
+}
+
+/**
+ * Represents a reply to a request to delete a subscription.
+ */
+export interface SubscriptionDeletionReply extends Reply {
+  data?: Record<string | number | symbol, never>;
+}
+
+/**
+ * The reply structure for a SubscriptionList operation
+ */
+export interface SubscriptionListReply extends Reply {
+  /**
+   * @minOccurs 0
+   * @maxOccurs 1
+   */
+  data?: SubscriptionListReplyData;
+}
+
+/**
+ * Data part of the reply for a subscription list operation
+ */
+export interface SubscriptionListReplyData {
+  /**
+   * @minOccurs 0
+   * @maxOccurs 1
+   */
+  subscriptions?: {
+    item?: SubscriptionSummary[];
+  };
+}
+
+/**
+ * Represents a reply to a request to pause a subscription.
+ */
+export interface SubscriptionPauseReply extends Reply {
+  data?: Record<string | number | symbol, never>;
+}
+
+/**
+ * Represents a reply to a request to resume a subscription.
+ */
+export interface SubscriptionResumeReply extends Reply {
+  data?: Record<string | number | symbol, never>;
+}
+
+/**
  * Represents an identifier for an Air Navigation Unit.
  *
  * XSD String Constraint: `(([A-Z]|[0-9])|[_ \-\+/\\\|\*=<>,.;:?!'\`"~@#$%^&\(\)\[\]\{\}]){1,12}`
@@ -246,43 +325,6 @@ export interface SubscriptionSummary {
    * @maxOccurs 1
    */
   heartbeatEnabled: boolean;
-}
-
-/**
- * The reply structure for a SubscriptionList operation
- */
-export interface SubscriptionListReply extends Reply {
-  /**
-   * @minOccurs 0
-   * @maxOccurs 1
-   */
-  data?: SubscriptionListReplyData;
-}
-
-/**
- * Data part of the reply for a subscription list operation
- */
-export interface SubscriptionListReplyData {
-  /**
-   * @minOccurs 0
-   * @maxOccurs 1
-   */
-  subscriptions?: {
-    item?: SubscriptionSummary[];
-  };
-}
-
-/**
- * The request structure for a SubscriptionList operation
- */
-export interface SubscriptionListRequest extends Request {
-  /**
-   * @minOccurs 0
-   * @maxOccurs 1
-   */
-  states?: {
-    item?: SubscriptionState[];
-  };
 }
 
 /**

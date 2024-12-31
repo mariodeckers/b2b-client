@@ -16,6 +16,23 @@ export type ReferenceLocation =
   | ReferenceLocationAerodromeSet;
 
 /**
+ * Represents an Aerodrome ICAO identifier, with support for wildcards.
+ */
+export type AerodromeICAOIdWildcard = string;
+
+/**
+ * Represents a Traffic Volume Set identifier.
+ * // xs:string with pattern:  "(([A-Z]|[0-9])|[_ \-\+/\\\|\*=<>,.;:?!'`"~@#$%^&\(\)\[\]\{\}]){1,8}"
+ */
+export type TrafficVolumeSetId = string;
+
+/**
+ * Represents a Traffic Volume Set identifier, with support for wildcards.
+ * // xs:string with pattern:  "((([A-Z]|[0-9])|[_ \-\+/\\\|\*=<>,.;:?!'`"~@#$%^&\(\)\[\]\{\}])|(\*)){1,8}"
+ */
+export type TrafficVolumeSetIdWildcard = string;
+
+/**
  * Represents the information about the location of a traffic volume.
  */
 export interface TrafficVolumeLocationInfo {

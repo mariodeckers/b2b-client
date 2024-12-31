@@ -19,7 +19,9 @@ import type {
   SignedDurationHourMinute,
   SignedDurationHourMinuteSecond,
   SignedWeightKg,
+  SubscriptionSummary,
   TimeHourMinutePeriod,
+  UUID,
   WeightKg,
 } from "../common/types.ts";
 import type {
@@ -42,6 +44,7 @@ import type {
 } from "../flow/types.ts";
 import type {
   AerodromeICAOId,
+  AerodromeICAOIdWildcard,
   AerodromeOrPublishedPointId,
   AirspaceId,
   AirspaceType,
@@ -53,7 +56,227 @@ import type {
   RouteOrTerminalProcedure,
   RunwayId,
   TerminalProcedure,
+  TrafficVolumeSetId,
 } from "../airspace/types.ts";
+
+/**
+ * Represents a request to create a flight data subscription.
+ */
+export interface FlightDataSubscriptionCreationRequest extends Request {
+  description?: string; // String with pattern: .{1,500}
+  queueName?: string;
+  messageFilter?: FlightDataMessageFilter;
+  payloadConfiguration: FlightDataPayloadConfiguration;
+}
+
+/**
+ * Represents a request to update a flight data subscription.
+ */
+export interface FlightDataSubscriptionUpdateRequest extends Request {
+  subscriptionUuid: UUID;
+  description?: string; // String with pattern: .{1,500}
+  messageFilter?: FlightDataMessageFilter;
+  payloadConfiguration: FlightDataPayloadConfiguration;
+}
+
+/**
+ * Represents the data within the reply when creating a flight data subscription.
+ */
+export interface FlightDataSubscriptionCreationReplyData {
+  subscription: FlightDataSubscription;
+}
+
+/**
+ * Represents a reply to a request to create a flight data subscription.
+ */
+export interface FlightDataSubscriptionCreationReply extends Reply {
+  data?: FlightDataSubscriptionCreationReplyData;
+}
+
+/**
+ * Represents the data within the reply when updating a flight data subscription.
+ */
+export interface FlightDataSubscriptionUpdateReplyData {
+  subscription: FlightDataSubscription;
+}
+
+/**
+ * Represents a reply to a request to update a flight data subscription.
+ */
+export interface FlightDataSubscriptionUpdateReply extends Reply {
+  data?: FlightDataSubscriptionUpdateReplyData;
+}
+
+/**
+ * Represents a flight data subscription.
+ */
+export interface FlightDataSubscription extends SubscriptionSummary {
+  messageFilter?: FlightDataMessageFilter;
+  payloadConfiguration: FlightDataPayloadConfiguration;
+}
+
+/**
+ * Defines a filter for flight data messages.
+ */
+export interface FlightDataMessageFilter {
+  /**
+   * Indicates whether proposal flights should be included.
+   */
+  includeProposalFlights: boolean; // xs:boolean
+  /**
+   * Defines the flight set.
+   */
+  flightSet?: {
+    item: FlightSetDefinitionElement[];
+  };
+}
+
+/**
+ * Defines the configuration for the flight data payload.
+ */
+export interface FlightDataPayloadConfiguration {
+  /**
+   * Defines the flight fields to be included.
+   */
+  flightFields?: {
+    item: PSFlightField[];
+  };
+  /**
+   * Indicates whether concerned units should be included.
+   */
+  concernedUnits: boolean; // xs:boolean
+  /**
+   * Defines the traffic volume selection.
+   */
+  trafficVolumeSelection?: TrafficVolumeSelection;
+}
+
+/**
+ * Represents the possible fields to include in the flight data payload.
+ */
+export type PSFlightField =
+  | "aircraftType"
+  | "aircraftOperator"
+  | "operatingAircraftOperator"
+  | "icaoRoute"
+  | "routeLength"
+  | "filedRegistrationMark"
+  | "lateFiler"
+  | "lateUpdater"
+  | "cdmEstimatedOffBlockTime"
+  | "calculatedOffBlockTime"
+  | "actualOffBlockTime"
+  | "estimatedTakeOffTime"
+  | "calculatedTakeOffTime"
+  | "actualTakeOffTime"
+  | "ctotLimitReason"
+  | "currentDepartureTaxiTimeAndProcedure"
+  | "suspensionStatus"
+  | "suspensionInfo"
+  | "readyStatus"
+  | "cdm"
+  | "proposalInformation"
+  | "bestReroutingIndicator"
+  | "slotZone"
+  | "slotSwapCounter"
+  | "departureTolerance"
+  | "exemptedFromRegulations"
+  | "delay"
+  | "delayCharacteristics"
+  | "mostPenalisingRegulation"
+  | "mostPenalisingRegulationCause"
+  | "hasOtherRegulations"
+  | "regulationLocations"
+  | "targetTimeOverFix"
+  | "excludedRegulations"
+  | "reroutable"
+  | "divertedAerodromeOfDestination"
+  | "estimatedTimeOfArrival"
+  | "calculatedTimeOfArrival"
+  | "actualTimeOfArrival"
+  | "arrivalInformation"
+  | "apiSubmissionRules"
+  | "flightState"
+  | "confirmedCTFM"
+  | "cfmuFlightType"
+  | "isProposalFlight"
+  | "profileValidity"
+  | "lastKnownPosition"
+  | "highestModelPointProfile"
+  | "highestModelAirspaceProfile"
+  | "highestModelTrafficVolumeProfile"
+  | "aircraftAddress"
+  | "flightDataVersionNr"
+  | "minimumRequestedRVR"
+  | "wakeTurbulenceCategory"
+  | "alternateAerodromes"
+  | "flightCriticality"
+  | "oceanicReroute"
+  | "iataFlightDesignator"
+  | "activeACDMAlerts"
+  | "routeChargeIndicator"
+  | "fuelConsumptionIndicator"
+  | `OTHER:${string}`; // String with pattern "OTHER:[a-zA-Z_][a-zA-Z0-9_]*"
+
+/**
+ * Defines the traffic volume selection.
+ */
+export interface TrafficVolumeSelection {
+  /**
+   * List of included traffic volume sets.
+   */
+  includedTrafficVolumeSets?: {
+    item: TrafficVolumeSetId[];
+  };
+}
+
+/**
+ * Represents a set of flight definition elements.
+ */
+export interface FlightSetDefinitionElement {
+  /**
+   * List of aircraft operators ICAO ids.
+   */
+  aircraftOperators?: {
+    item: AircraftOperatorICAOId[];
+  };
+  /**
+   * List of aircraft registrations.
+   */
+  aircraftRegistrations?: {
+    item: AircraftRegistrationMark[];
+  };
+  /**
+   * List of aerodromes of departure.
+   */
+  aerodromesOfDeparture?: {
+    item: AerodromeICAOIdWildcard[];
+  };
+  /**
+   * List of aerodromes of arrival.
+   */
+  aerodromesOfArrival?: {
+    item: AerodromeICAOIdWildcard[];
+  };
+  /**
+   * List of alternate aerodromes.
+   */
+  alternateAerodromes?: {
+    item: AerodromeICAOIdWildcard[];
+  };
+  /**
+   * List of air navigation unit ids.
+   */
+  anuIds?: {
+    item: AirNavigationUnitId[];
+  };
+  /**
+   * List of flight plan originators.
+   */
+  flightPlanOriginators?: {
+    item: AirNavigationUnitId[];
+  };
+}
 
 /**
  * Represents a request to retrieve a list of flights for a specific aerodrome.

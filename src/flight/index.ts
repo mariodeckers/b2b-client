@@ -1,5 +1,7 @@
 import type { BaseClient } from "../base-client.ts";
 import type {
+  FlightDataSubscriptionCreationReply,
+  FlightDataSubscriptionCreationRequest,
   FlightListByAerodromeReply,
   FlightListByAerodromeRequest,
   FlightListByAircraftOperatorReply,
@@ -12,6 +14,22 @@ export class FlightService {
 
   constructor(client: BaseClient) {
     this.client = client;
+  }
+
+  FlightDataSubscriptionCreationRequest(
+    request: FlightDataSubscriptionCreationRequest,
+  ): Promise<FlightDataSubscriptionCreationReply> {
+    const requestBody = createXmlRequest(
+      "fl",
+      "FlightDataSubscriptionCreationRequest",
+      "eurocontrol/cfmu/b2b/FlightServices",
+      request,
+    );
+
+    return this.client.sendRequest<
+      typeof requestBody,
+      FlightDataSubscriptionCreationReply
+    >(requestBody);
   }
 
   FlightListByAerodromeRequest(
