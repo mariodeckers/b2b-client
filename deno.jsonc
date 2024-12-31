@@ -1,6 +1,6 @@
 {
   "name": "@mariodeckers/b2b-client",
-  "version": "0.1.0", // should match git tag "vX.Y.Z"
+  "version": "0.2.0", // should match git tag "vX.Y.Z"
   "license": "MIT",
   "exports": "./mod.ts", // https://jsr.io/docs/package-configuration
   "imports": {
