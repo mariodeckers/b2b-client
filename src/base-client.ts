@@ -83,7 +83,7 @@ class NodeClient implements ApiClient {
       // Use dynamic imports with proper error handling
       try {
         const [{ default: axiosModule }, httpsModule] = await Promise.all([
-          import('npm:axios'),
+          import('npm:axios@1.7.9'),
           import('node:https')
         ]);
         this.axios = axiosModule;
