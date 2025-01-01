@@ -9,6 +9,10 @@ import type {
 } from "./types.ts";
 import { createXmlRequest } from "../utils.ts";
 
+/**
+ * Handles flight-related B2B service operations
+ * @class FlightService
+ */
 export class FlightService {
   private readonly client: BaseClient;
 
@@ -16,6 +20,11 @@ export class FlightService {
     this.client = client;
   }
 
+  /**
+   * Creates a flight-data subscription
+   * @param {FlightDataSubscriptionCreationRequest} request - The subscription creation request parameters
+   * @returns {Promise<FlightDataSubscriptionCreationReply>} The subscription creation response
+   */
   FlightDataSubscriptionCreationRequest(
     request: FlightDataSubscriptionCreationRequest,
   ): Promise<FlightDataSubscriptionCreationReply> {
@@ -32,6 +41,11 @@ export class FlightService {
     >(requestBody);
   }
 
+  /**
+   * Retrieves flight data for the specified aerodromes
+   * @param {FlightListByAerodromeRequest} request - The flight retrieval parameters
+   * @returns {Promise<FlightListByAerodromeReply>} The flight data response
+   */
   FlightListByAerodromeRequest(
     request: FlightListByAerodromeRequest,
   ): Promise<FlightListByAerodromeReply> {
@@ -48,6 +62,11 @@ export class FlightService {
     >(requestBody);
   }
 
+  /**
+   * Retrieves flight data for the specified aircraft operators
+   * @param {FlightListByAircraftOperatorRequest} request - The flight retrieval parameters
+   * @returns {Promise<FlightListByAircraftOperatorReply>} The flight data response
+   */
   FlightListByAircraftOperatorRequest(
     request: FlightListByAircraftOperatorRequest,
   ): Promise<FlightListByAircraftOperatorReply> {

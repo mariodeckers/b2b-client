@@ -5,6 +5,10 @@ import type {
 } from "./types.ts";
 import { createXmlRequest } from "../utils.ts";
 
+/**
+ * Handles general information related B2B service operations
+ * @class GeneralInformationService
+ */
 export class GeneralInformationService {
   private readonly client: BaseClient;
 
@@ -12,10 +16,14 @@ export class GeneralInformationService {
     this.client = client;
   }
 
+  /**
+   * Retrieves NM Release Information
+   * @param {NMReleaseInformationRequest} request - The request parameters
+   * @returns {Promise<NMReleaseInformationReply>} The response
+   */
   NMReleaseInformationRequest(
     request: NMReleaseInformationRequest,
   ): Promise<NMReleaseInformationReply> {
-    console.log("Request:", request);
     const requestBody = createXmlRequest(
       "gi",
       "NMReleaseInformationRequest",

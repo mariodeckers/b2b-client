@@ -5,10 +5,40 @@ This module provides limited functionality for interacting with NM B2B services.
 Use of this module requires that you obtain a certificate and sign an agreement
 with NM.
 
+The module, while functional, merely serves as an example to get you started
+with NM B2B in a TypeScript or JavaScript environment.
+
 ## Usage
 
-More detailed usage instructions will be added here. For basic usage, please
-refer to the example provided.
+For debug logging, set environment variable _B2B_CLIENT_DEBUG=on_ or _=true_.
+
+### Deno
+
+```TS
+import {
+  BaseClient,
+  CommonService,
+  FlightService,
+  GeneralInformationService,
+} from "jsr:@mariodeckers/b2b-client";
+```
+
+### Node
+
+Install from JSR:
+
+```bash
+npx jsr add @mariodeckers/b2b-client
+```
+
+```JS
+import {
+  BaseClient,
+  CommonService,
+  FlightService,
+  GeneralInformationService,
+} from "@mariodeckers/b2b-client";
+```
 
 ## Features
 
@@ -24,6 +54,10 @@ For a basic example of how to use this module, see
 [example/basic.ts](example/basic.ts).
 
 ## Utilities
+
+⚠️ Consider using a dedicated secrets manager (HashiCorp Vault, Azure Key
+Vault,…) instead of storing your certificate and key on the server. Never commit
+your certificates and private keys to Git.
 
 The Deno script [scripts/extract-p12.ts](scripts/extract-p12.ts) can be used to
 extract certificates and private key from a .p12 file.

@@ -9,6 +9,10 @@
   "fmt": {
     "exclude": ["cert/", "schemas/"]
   },
+  "tasks": {
+    "example": "deno run --allow-net --allow-read --allow-env=B2B_CLIENT_DEBUG example/basic.ts",
+    "example:debug": "export B2B_CLIENT_DEBUG=on && deno run --allow-net --allow-read --allow-env=B2B_CLIENT_DEBUG example/basic.ts"
+  },
   "publish": {
     "include": [
       "src/",

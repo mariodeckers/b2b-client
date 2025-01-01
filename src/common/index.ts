@@ -11,6 +11,10 @@ import { SubscriptionPauseReply } from "./types.ts";
 import { SubscriptionDeletionRequest } from "./types.ts";
 import { SubscriptionDeletionReply } from "./types.ts";
 
+/**
+ * Handles common subscription-related B2B service operations
+ * @class CommonService
+ */
 export class CommonService {
   private readonly client: BaseClient;
 
@@ -18,6 +22,11 @@ export class CommonService {
     this.client = client;
   }
 
+  /**
+   * Lists all P/S subscriptions
+   * @param {SubscriptionListRequest} request - The subscription list request parameters
+   * @returns {Promise<SubscriptionListReply>} The subscription list response
+   */
   SubscriptionListRequest(
     request: SubscriptionListRequest,
   ): Promise<SubscriptionListReply> {
@@ -34,6 +43,11 @@ export class CommonService {
     >(requestBody);
   }
 
+  /**
+   * Pauses a subscription
+   * @param {SubscriptionPauseRequest} request - The subscription pause request parameters
+   * @returns {Promise<SubscriptionPauseReply>} The subscription pause response
+   */
   SubscriptionPauseRequest(
     request: SubscriptionPauseRequest,
   ): Promise<SubscriptionPauseReply> {
@@ -50,6 +64,11 @@ export class CommonService {
     >(requestBody);
   }
 
+  /**
+   * Resumes a previously paused subscription
+   * @param {SubscriptionResumeRequest} request - The subscription resume request parameters
+   * @returns {Promise<SubscriptionResumeReply>} The subscription resume response
+   */
   SubscriptionResumeRequest(
     request: SubscriptionResumeRequest,
   ): Promise<SubscriptionResumeReply> {
@@ -66,6 +85,11 @@ export class CommonService {
     >(requestBody);
   }
 
+  /**
+   * Deletes an existing subscription
+   * @param {SubscriptionDeletionRequest} request - The subscription deletion request parameters
+   * @returns {Promise<SubscriptionDeletionReply>} The subscription deletion response
+   */
   SubscriptionDeletionRequest(
     request: SubscriptionDeletionRequest,
   ): Promise<SubscriptionDeletionReply> {
