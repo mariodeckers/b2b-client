@@ -4,7 +4,8 @@
   "license": "MIT",
   "exports": "./mod.ts", // https://jsr.io/docs/package-configuration
   "imports": {
-    "@libs/xml": "jsr:@libs/xml@^6.0.4"
+    "@libs/xml": "jsr:@libs/xml@^6.0.4",
+    "@std/dotenv": "jsr:@std/dotenv@^0.225.3"
   },
   "fmt": {
     "exclude": ["cert/", "schemas/"]

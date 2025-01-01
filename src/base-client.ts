@@ -1,8 +1,9 @@
 import type { xml_document } from "@libs/xml";
 import type { PemCertificate } from "./types.ts";
 import { parseFromXML, stringifyToXml, unwrapXmlResponse } from "./utils.ts";
-import "jsr:@std/dotenv/load";
+import { load } from "@std/dotenv";
 
+await load({ export: true }); // Import environment variables
 const DEBUG_ENV_VAR = "B2B_CLIENT_DEBUG";
 const isDebugEnabled = Deno.env.get(DEBUG_ENV_VAR)?.toLowerCase() === "true" ||
   Deno.env.get(DEBUG_ENV_VAR)?.toLowerCase() === "on";
